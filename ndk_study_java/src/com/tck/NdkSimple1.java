@@ -10,6 +10,6 @@ public class NdkSimple1 {
     public native static void changeAge();
 
     static {
-        System.load("D:/c_project/JniSimple/JniSimple/Debug/JniSimple.dll");
+        System.load("D:/c_project/ndk_study/JniSimple/JniSimple/Debug/JniSimple.dll");
     }
 }
