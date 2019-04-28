@@ -62,3 +62,28 @@ JNIEXPORT void JNICALL Java_com_tck_NdkSimple1_callGetUUID
 	printf("c_uuid = %s", c_str);
 
 }
+
+JNIEXPORT jobject JNICALL Java_com_tck_NdkSimple1_createPoint
+(JNIEnv* env, jclass jcls) {
+	
+
+	jclass point_clas = (*env)->FindClass(env, "com/tck/Point");
+	//构建java层的对象是，构造函数的id ,构造函数的方法<init>
+	jmethodID  j_mid = (*env)->GetMethodID(env, point_clas,"<init>","(II)V" );
+
+	jobject j_point = (*env)->NewObject(env, point_clas, j_mid, 11, 12);
+
+	return j_point;
+
+}
+
+/*void main() {
+
+	//常量指针 值不能改 地址是可以改 const 在*之前
+	//常量变量 不能再次赋值
+
+	//指针常量 地址不能被重新赋值 const 在*之后
+	//
+
+
+}*/

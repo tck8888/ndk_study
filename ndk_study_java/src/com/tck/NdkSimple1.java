@@ -7,6 +7,8 @@ public class NdkSimple1 {
     public String name = "tck";
     public static int age = 29;
 
+
+
     public int add(int num1, int num2) {
         return num1 + num2;
     }
@@ -23,6 +25,7 @@ public class NdkSimple1 {
 
     public static native void callGetUUID();
 
+    public static native Point createPoint();
     static {
         System.load("D:/c_project/ndk_study/JniSimple/JniSimple/Debug/JniSimple.dll");
     }

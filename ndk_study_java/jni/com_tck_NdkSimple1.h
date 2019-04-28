@@ -39,6 +39,14 @@ JNIEXPORT void JNICALL Java_com_tck_NdkSimple1_callAddMethod
 JNIEXPORT void JNICALL Java_com_tck_NdkSimple1_callGetUUID
   (JNIEnv *, jclass);
 
+/*
+ * Class:     com_tck_NdkSimple1
+ * Method:    createPoint
+ * Signature: ()Lcom/tck/Point;
+ */
+JNIEXPORT jobject JNICALL Java_com_tck_NdkSimple1_createPoint
+  (JNIEnv *, jclass);
+
 #ifdef __cplusplus
 }
 #endif

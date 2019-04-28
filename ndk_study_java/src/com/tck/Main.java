@@ -19,6 +19,9 @@ public class Main {
 
         //c调用java方法
        // ndkSimple.callAddMethod();
-        NdkSimple1.callGetUUID();
+        //NdkSimple1.callGetUUID();
+
+        Point point = NdkSimple1.createPoint();
+        System.out.println("point.getX()="+point.getX()+" , point.getY()="+point.getY());
     }
 }
