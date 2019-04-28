@@ -42,3 +42,23 @@ JNIEXPORT void JNICALL Java_com_tck_NdkSimple1_changeAge
 	(*env)->SetStaticIntField(env, jcls, j_field, j_int);
 
 }
+
+JNIEXPORT void JNICALL Java_com_tck_NdkSimple1_callAddMethod
+(JNIEnv* env, jobject jobj) {
+	//去调用java的方法
+	jclass jclazz = (*env)->GetObjectClass(env, jobj);
+	jmethodID  j_mid = (*env)->GetMethodID(env, jclazz, "add","(II)I" );
+	jint j_int = (*env)->CallIntMethod(env, jobj, j_mid,2,3);
+	printf("j_int=%d", j_int);
+}
+
+JNIEXPORT void JNICALL Java_com_tck_NdkSimple1_callGetUUID
+(JNIEnv* env, jclass jcls) {
+	jmethodID  j_mid = (*env)->GetStaticMethodID(env, jcls, "getUUID", "()Ljava/lang/String;");
+	jstring j_string = (*env)->CallStaticObjectMethod(env, jcls, j_mid);
+	char *c_str = (*env)->GetStringUTFChars(env, j_string,NULL);
+	//回收
+	(*env)->ReleaseStringUTFChars(env, j_string, c_str);
+	printf("c_uuid = %s", c_str);
+
+}

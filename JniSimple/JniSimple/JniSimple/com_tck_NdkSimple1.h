@@ -23,6 +23,22 @@ JNIEXPORT void JNICALL Java_com_tck_NdkSimple1_changeName
 JNIEXPORT void JNICALL Java_com_tck_NdkSimple1_changeAge
   (JNIEnv *, jclass);
 
+/*
+ * Class:     com_tck_NdkSimple1
+ * Method:    callAddMethod
+ * Signature: ()V
+ */
+JNIEXPORT void JNICALL Java_com_tck_NdkSimple1_callAddMethod
+  (JNIEnv *, jobject);
+
+/*
+ * Class:     com_tck_NdkSimple1
+ * Method:    callGetUUID
+ * Signature: ()V
+ */
+JNIEXPORT void JNICALL Java_com_tck_NdkSimple1_callGetUUID
+  (JNIEnv *, jclass);
+
 #ifdef __cplusplus
 }
 #endif
