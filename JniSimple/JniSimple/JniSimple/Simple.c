@@ -73,6 +73,14 @@ JNIEXPORT jobject JNICALL Java_com_tck_NdkSimple1_createPoint
 
 	jobject j_point = (*env)->NewObject(env, point_clas, j_mid, 11, 12);
 
+	//使用set方法给属性赋值
+	jmethodID  j_mids = (*env)->GetMethodID(env, point_clas, "setX","(I)V");
+	(*env)->CallVoidMethod(env, j_point, j_mids,666);
+
+	//通过SetIntField设置属性的值
+	jfieldID j_field=(*env)->GetFieldID(env, point_clas,"y","I");
+	(*env)->SetIntField(env, j_point, j_field,1000);
+
 	return j_point;
 
 }
