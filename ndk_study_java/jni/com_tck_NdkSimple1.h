@@ -47,6 +47,46 @@ JNIEXPORT void JNICALL Java_com_tck_NdkSimple1_callGetUUID
 JNIEXPORT jobject JNICALL Java_com_tck_NdkSimple1_createPoint
   (JNIEnv *, jclass);
 
+/*
+ * Class:     com_tck_NdkSimple1
+ * Method:    sort
+ * Signature: ([I)V
+ */
+JNIEXPORT void JNICALL Java_com_tck_NdkSimple1_sort
+  (JNIEnv *, jclass, jintArray);
+
+/*
+ * Class:     com_tck_NdkSimple1
+ * Method:    localRef
+ * Signature: ()V
+ */
+JNIEXPORT void JNICALL Java_com_tck_NdkSimple1_localRef
+  (JNIEnv *, jclass);
+
+/*
+ * Class:     com_tck_NdkSimple1
+ * Method:    saveGlobalRef
+ * Signature: (Ljava/lang/String;)V
+ */
+JNIEXPORT void JNICALL Java_com_tck_NdkSimple1_saveGlobalRef
+  (JNIEnv *, jclass, jstring);
+
+/*
+ * Class:     com_tck_NdkSimple1
+ * Method:    getGlobalRef
+ * Signature: ()Ljava/lang/String;
+ */
+JNIEXPORT jstring JNICALL Java_com_tck_NdkSimple1_getGlobalRef
+  (JNIEnv *, jclass);
+
+/*
+ * Class:     com_tck_NdkSimple1
+ * Method:    delGlobalRef
+ * Signature: ()V
+ */
+JNIEXPORT void JNICALL Java_com_tck_NdkSimple1_delGlobalRef
+  (JNIEnv *, jclass);
+
 #ifdef __cplusplus
 }
 #endif

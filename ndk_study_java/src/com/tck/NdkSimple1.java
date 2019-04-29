@@ -26,6 +26,17 @@ public class NdkSimple1 {
     public static native void callGetUUID();
 
     public static native Point createPoint();
+
+    public static native void sort(int[] arr);
+
+    public static native void localRef();
+
+    public static native void  saveGlobalRef(String str);
+
+    public static native String getGlobalRef();
+
+    public static native void delGlobalRef();
+
     static {
         System.load("D:/c_project/ndk_study/JniSimple/JniSimple/Debug/JniSimple.dll");
     }

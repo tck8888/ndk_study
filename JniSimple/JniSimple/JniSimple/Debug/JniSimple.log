@@ -1,6 +1,6 @@
 ﻿  JNIenv.cpp
   Simple.c
-D:\c_project\ndk_study\JniSimple\JniSimple\JniSimple\Simple.c(27): warning C4090: “初始化”: 不同的“const”限定符
-D:\c_project\ndk_study\JniSimple\JniSimple\JniSimple\Simple.c(59): warning C4090: “初始化”: 不同的“const”限定符
+D:\c_project\ndk_study\JniSimple\JniSimple\JniSimple\Simple.c(28): warning C4090: “初始化”: 不同的“const”限定符
+D:\c_project\ndk_study\JniSimple\JniSimple\JniSimple\Simple.c(60): warning C4090: “初始化”: 不同的“const”限定符
     正在创建库 D:\c_project\ndk_study\JniSimple\JniSimple\Debug\JniSimple.lib 和对象 D:\c_project\ndk_study\JniSimple\JniSimple\Debug\JniSimple.exp
   JniSimple.vcxproj -> D:\c_project\ndk_study\JniSimple\JniSimple\Debug\JniSimple.dll

@@ -2,6 +2,7 @@
 #include "com_tck_NdkSimple.h"
 #include "com_tck_NdkSimple1.h"
 
+#include <stdlib.h>
 
 /*
 
@@ -83,6 +84,67 @@ JNIEXPORT jobject JNICALL Java_com_tck_NdkSimple1_createPoint
 
 	return j_point;
 
+}
+int compare(const jint* number1, const jint* number2) {
+	return *number1 - *number2;
+}
+//排序
+JNIEXPORT void JNICALL Java_com_tck_NdkSimple1_sort
+(JNIEnv* env, jclass jcls, jintArray jarr) {
+	jint *intArray = (*env)->GetIntArrayElements(env, jarr,NULL);
+	int length = (*env)->GetArrayLength(env, jarr);
+	//第一个参数：数组的首地址
+	//数组的长度
+	//数组数据类型的大小
+	//数组的一个比较方法指针
+	qsort(intArray,length,sizeof(int), compare);
+
+	//同步数据
+	//0:同步数据到jarr 同时释放intArray
+	//JNI_COMMIT:同步数据 不会释放
+	//JNI_ABORT:不同步数据 会释放
+	(*env)->ReleaseIntArrayElements(env, jarr, intArray, 0);
+}
+
+jstring globalStr;
+
+//native构建的java对象，管理
+//native构建的内存管理
+JNIEXPORT void JNICALL Java_com_tck_NdkSimple1_localRef
+(JNIEnv* env, jclass jcls) {
+
+	jclass str_claz = (*env)->FindClass(env, "java/lang/String");
+	jmethodID jmid = (*env)->GetMethodID(env, str_claz, "<init>", "()V");
+	jobject jobj = (*env)->NewObject(env, str_claz, jmid);
+
+	//回收,不能在使用 静态开辟不需要
+	(*env)->DeleteLocalRef(env, jobj);
+}
+
+JNIEXPORT void JNICALL Java_com_tck_NdkSimple1_saveGlobalRef
+(JNIEnv* env, jclass jcls, jstring jstr) {
+	//保存全局变量
+
+	globalStr = (*env)->NewGlobalRef(env, jstr);
+}
+
+JNIEXPORT jstring JNICALL Java_com_tck_NdkSimple1_getGlobalRef
+(JNIEnv* env, jclass jcls ) {
+	/*if (globalStr!=NULL) {
+		return globalStr;
+	}
+	else {
+		return "";
+	}*/
+	return globalStr;
+	
+}
+
+JNIEXPORT void JNICALL Java_com_tck_NdkSimple1_delGlobalRef
+(JNIEnv* env, jclass jcls) {
+	(*env)->DeleteGlobalRef(env, globalStr);
+	//globalStr = NULL;
+	
 }
 
 /*void main() {
