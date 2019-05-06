@@ -147,6 +147,64 @@ JNIEXPORT void JNICALL Java_com_tck_NdkSimple1_delGlobalRef
 	
 }
 
+
+//局部缓存
+/*JNIEXPORT void JNICALL Java_com_tck_NdkSimple1_staticLocalCache
+(JNIEnv* env, jclass jcls, jstring str) {
+	
+	static jfieldID jid = NULL;
+	if (jid==NULL) {
+		jid = (*env)->GetStaticFieldID(env, jcls, "name1", "Ljava/lang/String;");
+	}
+	else {
+		printf("filedId is Not NULL\n");
+	}
+	
+	(*env)->SetStaticObjectField(env, jcls, jid, str);
+}*/
+
+
+
+//全局缓存
+static jfieldID jid_name = NULL;
+static jfieldID jid_name1 = NULL;
+static jfieldID jid_name2 = NULL;
+
+JNIEXPORT void JNICALL Java_com_tck_NdkSimple1_staticLocalCache
+(JNIEnv* env, jclass jcls, jstring str) {
+	(*env)->SetStaticObjectField(env, jcls, jid_name, str);
+}
+
+JNIEXPORT void JNICALL Java_com_tck_NdkSimple1_initStaticCache
+(JNIEnv* env, jclass jcls) {
+	jid_name = (*env)->GetStaticFieldID(env, jcls, "name1", "Ljava/lang/String;");
+	jid_name1 = (*env)->GetStaticFieldID(env, jcls, "name1", "Ljava/lang/String;");
+	jid_name2 = (*env)->GetStaticFieldID(env, jcls, "name2", "Ljava/lang/String;");
+}
+
+//异常处理
+JNIEXPORT void JNICALL Java_com_tck_NdkSimple1_exception
+(JNIEnv* env, jclass jcls) {
+	jfieldID jid = (*env)->GetStaticFieldID(env, jcls, "name3", "Ljava/lang/String;");
+	//1.补救措施
+	jthrowable throwable = (*env)->ExceptionOccurred(env);
+	if (throwable) {
+		//清除异常
+		printf("有异常");
+		(*env)->ExceptionClear(env);
+		jclass jclzz = (*env)->FindClass(env,"java/lang/NoSuchFieldException" );
+		(*env)->ThrowNew(env, jclzz,"没有找到name3");
+		return;
+			//jid = (*env)->GetStaticFieldID(env, jcls, "name1", "Ljava/lang/String;");
+	}
+
+	jstring name = (*env)->NewStringUTF(env, "tck");
+	(*env)->SetStaticObjectField(env, jcls, jid, name);
+
+}
+
+
+
 /*void main() {
 
 	//常量指针 值不能改 地址是可以改 const 在*之前

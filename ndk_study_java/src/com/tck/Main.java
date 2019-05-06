@@ -37,18 +37,34 @@ public class Main {
 //            System.out.print(arr[i] + "\t");
 //        }
 
-        //局部引用和全局引用
-        NdkSimple1.saveGlobalRef("tck");
-        System.out.println(NdkSimple1.getGlobalRef());
-        //删除全局引用
-        NdkSimple1.delGlobalRef();
+//        //局部引用和全局引用
+//        NdkSimple1.saveGlobalRef("tck");
+//        System.out.println(NdkSimple1.getGlobalRef());
+//        //删除全局引用
+//        NdkSimple1.delGlobalRef();
+//
+//        String globalRef = NdkSimple1.getGlobalRef();
+//
+//        if (globalRef == null) {
+//            System.out.println("删除成功");
+//        }else {
+//            System.out.println("删除失败");
+//        }
 
-        String globalRef = NdkSimple1.getGlobalRef();
-
-        if (globalRef == null) {
-            System.out.println("删除成功");
-        }else {
-            System.out.println("删除失败");
+//        NdkSimple1.initStaticCache();
+//        //缓存策略 局部缓存
+//        NdkSimple1.staticLocalCache("tck");
+//        System.out.println("name1 = " + NdkSimple1.name1);
+//        NdkSimple1.staticLocalCache("syy");
+//        System.out.println("name1 = " + NdkSimple1.name1);
+//        NdkSimple1.staticLocalCache("tzl");
+//        System.out.println("name1 = " + NdkSimple1.name1);
+        try {
+            NdkSimple1.exception();
+            System.out.println(NdkSimple1.name1);
+        } catch (NoSuchFieldException e) {
+            e.printStackTrace();
         }
+
     }
 }

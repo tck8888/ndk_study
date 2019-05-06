@@ -6,6 +6,8 @@ public class NdkSimple1 {
 
     public String name = "tck";
     public static int age = 29;
+    public static String name1;
+    public static String name2;
 
 
 
@@ -31,11 +33,18 @@ public class NdkSimple1 {
 
     public static native void localRef();
 
-    public static native void  saveGlobalRef(String str);
+    public static native void saveGlobalRef(String str);
 
     public static native String getGlobalRef();
 
     public static native void delGlobalRef();
+
+    public static native void staticLocalCache(String value);
+
+    public static native void initStaticCache();
+
+    public static native void exception() throws NoSuchFieldException;
+
 
     static {
         System.load("D:/c_project/ndk_study/JniSimple/JniSimple/Debug/JniSimple.dll");

@@ -87,6 +87,30 @@ JNIEXPORT jstring JNICALL Java_com_tck_NdkSimple1_getGlobalRef
 JNIEXPORT void JNICALL Java_com_tck_NdkSimple1_delGlobalRef
   (JNIEnv *, jclass);
 
+/*
+ * Class:     com_tck_NdkSimple1
+ * Method:    staticLocalCache
+ * Signature: (Ljava/lang/String;)V
+ */
+JNIEXPORT void JNICALL Java_com_tck_NdkSimple1_staticLocalCache
+  (JNIEnv *, jclass, jstring);
+
+/*
+ * Class:     com_tck_NdkSimple1
+ * Method:    initStaticCache
+ * Signature: ()V
+ */
+JNIEXPORT void JNICALL Java_com_tck_NdkSimple1_initStaticCache
+  (JNIEnv *, jclass);
+
+/*
+ * Class:     com_tck_NdkSimple1
+ * Method:    exception
+ * Signature: ()V
+ */
+JNIEXPORT void JNICALL Java_com_tck_NdkSimple1_exception
+  (JNIEnv *, jclass);
+
 #ifdef __cplusplus
 }
 #endif
