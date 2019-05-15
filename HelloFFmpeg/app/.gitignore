@@ -1,0 +1,5 @@
+/build
+.externalNativeBuild/
+*.impl
+/src/androidTest/
+/src/test/
