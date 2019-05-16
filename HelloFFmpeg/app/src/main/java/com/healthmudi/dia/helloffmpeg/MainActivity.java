@@ -27,11 +27,11 @@ public class MainActivity extends AppCompatActivity {
 
         tv.setText(stringFromJNI());
 
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
-            open("/sdcard/DCIM/Camera/VID_20190316_094100.mp4",this);
-        }else {
-            ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},100);
-        }
+//        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+//            open("/sdcard/DCIM/Camera/VID_20190316_094100.mp4",this);
+//        }else {
+//            ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},100);
+//        }
     }
 
     @Override
