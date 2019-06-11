@@ -21,7 +21,7 @@ public class YGLSurfaceView extends GLSurfaceView {
 
         //设置EGL的版本
         setEGLContextClientVersion(2);
-        setRenderer(new YRenderer());
+        setRenderer(new YRenderer(this));
 
         //设置按需渲染 当我们调用 requestRender 请求GLThread 回调一次 onDrawFrame
         // 连续渲染 就是自动的回调onDrawFrame
