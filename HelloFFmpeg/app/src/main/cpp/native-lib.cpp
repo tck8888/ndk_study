@@ -26,6 +26,9 @@ Java_com_healthmudi_dia_helloffmpeg_MainActivity_stringFromJNI(
     av_register_all();
     //2.初始化网络
     avformat_network_init();
+
+    avcodec_register_all();
+
     //打开文件
     AVFormatContext *ic = NULL;
     char path[] = "/sdcard/DCIM/Camera/VID_20190516_130700.mp4";
@@ -73,6 +76,25 @@ Java_com_healthmudi_dia_helloffmpeg_MainActivity_stringFromJNI(
     //获取音频流数据
     audioStream = av_find_best_stream(ic, AVMEDIA_TYPE_AUDIO, -1, -1, NULL, 0);
     LOGW("av_find_best_stream =%d ", audioStream);
+
+    //软解码  解码器
+    AVCodec *codec = avcodec_find_decoder(ic->streams[videoStream]->codecpar->codec_id);
+    //硬解码
+   // codec = avcodec_find_decoder_by_name("h264_mediacoder");
+    if (!codec) {
+        LOGW("avcodec_find failed");\
+        return env->NewStringUTF(hello.c_str());
+    }
+    //解码器初始化
+    AVCodecContext *cc = avcodec_alloc_context3(codec);
+    avcodec_parameters_to_context(cc,ic->streams[videoStream]->codecpar);
+    cc->thread_count=1;
+    //打开解码器
+    re = avcodec_open2(cc,0,0);
+    if (!re){
+
+    }
+
 
     //读取帧数据
     AVPacket *pkt = av_packet_alloc();
