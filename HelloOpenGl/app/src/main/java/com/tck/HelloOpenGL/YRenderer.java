@@ -5,6 +5,7 @@ import android.hardware.Camera;
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
 
+import com.tck.HelloOpenGL.filter.CameraFilter;
 import com.tck.HelloOpenGL.filter.ScreenFilter;
 import com.tck.HelloOpenGL.util.CameraHelper;
 
@@ -15,6 +16,7 @@ import javax.microedition.khronos.opengles.GL10;
  * <p>description:</p>
  * <p>created on: 2019/6/11 8:47</p>
  * https://blog.csdn.net/qq_33216658/article/details/83541788
+ *
  * @author tck
  * @version 3.5.2
  */
@@ -27,6 +29,7 @@ public class YRenderer implements GLSurfaceView.Renderer, SurfaceTexture.OnFrame
     private float[] mtx = new float[16];
     private ScreenFilter screenFilter;
     private int[] textures;
+    private CameraFilter cameraFilter;
 
     public YRenderer(YGLSurfaceView yglSurfaceView) {
         this.yglSurfaceView = yglSurfaceView;
@@ -42,6 +45,7 @@ public class YRenderer implements GLSurfaceView.Renderer, SurfaceTexture.OnFrame
         surfaceTexture.setOnFrameAvailableListener(this);
 
         //注意：必须在gl线程操作opengl
+        cameraFilter = new CameraFilter(yglSurfaceView.getContext());
         screenFilter = new ScreenFilter(yglSurfaceView.getContext());
     }
 
@@ -56,7 +60,8 @@ public class YRenderer implements GLSurfaceView.Renderer, SurfaceTexture.OnFrame
     public void onSurfaceChanged(GL10 gl10, int i, int i1) {
         //开启预览
         cameraHelper.startPreview(surfaceTexture);
-        screenFilter.onReady(i,i1);
+        cameraFilter.onReady(i, i1);
+        screenFilter.onReady(i, i1);
     }
 
     /**
@@ -78,8 +83,15 @@ public class YRenderer implements GLSurfaceView.Renderer, SurfaceTexture.OnFrame
         //surfaceTexture 比较特殊，在opengl当中 使用的是特殊的采样器 samplerExternalOES （不是sampler2D）
         //获得变换矩阵
         surfaceTexture.getTransformMatrix(mtx);
-
-        screenFilter.onDrawFrame(textures[0],mtx);
+        cameraFilter.setMatrix(mtx);
+        //责任链
+        int id = cameraFilter.onDrawFrame(textures[0]);
+        //加效果滤镜
+        // id  = 效果1.onDrawFrame(id);
+        // id = 效果2.onDrawFrame(id);
+        //....
+        //加完之后再显示到屏幕中去
+        screenFilter.onDrawFrame(id);
     }
 
     /**
@@ -88,5 +100,9 @@ public class YRenderer implements GLSurfaceView.Renderer, SurfaceTexture.OnFrame
     @Override
     public void onFrameAvailable(SurfaceTexture surfaceTexture) {
         yglSurfaceView.requestRender();
+    }
+
+    public void onSurfaceDestroyed() {
+        cameraHelper.stopPreview();
     }
 }

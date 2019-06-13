@@ -3,6 +3,7 @@ package com.tck.HelloOpenGL;
 import android.content.Context;
 import android.opengl.GLSurfaceView;
 import android.util.AttributeSet;
+import android.view.SurfaceHolder;
 
 /**
  * <p>description:</p>
@@ -12,6 +13,9 @@ import android.util.AttributeSet;
  * @version 3.5.2
  */
 public class YGLSurfaceView extends GLSurfaceView {
+
+    private YRenderer renderer;
+
     public YGLSurfaceView(Context context) {
         this(context, null);
     }
@@ -21,10 +25,17 @@ public class YGLSurfaceView extends GLSurfaceView {
 
         //设置EGL的版本
         setEGLContextClientVersion(2);
-        setRenderer(new YRenderer(this));
+        renderer = new YRenderer(this);
+        setRenderer(renderer);
 
         //设置按需渲染 当我们调用 requestRender 请求GLThread 回调一次 onDrawFrame
         // 连续渲染 就是自动的回调onDrawFrame
         setRenderMode(RENDERMODE_WHEN_DIRTY);
+    }
+
+    @Override
+    public void surfaceDestroyed(SurfaceHolder holder) {
+        super.surfaceDestroyed(holder);
+        renderer.onSurfaceDestroyed();
     }
 }
