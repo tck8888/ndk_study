@@ -5,6 +5,7 @@ import android.hardware.Camera;
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
 
+import com.tck.HelloOpenGL.filter.ScreenFilter;
 import com.tck.HelloOpenGL.util.CameraHelper;
 
 import javax.microedition.khronos.egl.EGLConfig;
@@ -24,6 +25,8 @@ public class YRenderer implements GLSurfaceView.Renderer, SurfaceTexture.OnFrame
     private YGLSurfaceView yglSurfaceView;
 
     private float[] mtx = new float[16];
+    private ScreenFilter screenFilter;
+    private int[] textures;
 
     public YRenderer(YGLSurfaceView yglSurfaceView) {
         this.yglSurfaceView = yglSurfaceView;
@@ -33,10 +36,13 @@ public class YRenderer implements GLSurfaceView.Renderer, SurfaceTexture.OnFrame
     public void onSurfaceCreated(GL10 gl10, EGLConfig eglConfig) {
         cameraHelper = new CameraHelper(Camera.CameraInfo.CAMERA_FACING_BACK);
         //创建纹理id
-        int[] textures = new int[1];
+        textures = new int[1];
         GLES20.glGenTextures(textures.length, textures, 0);
         surfaceTexture = new SurfaceTexture(textures[0]);
         surfaceTexture.setOnFrameAvailableListener(this);
+
+        //注意：必须在gl线程操作opengl
+        screenFilter = new ScreenFilter(yglSurfaceView.getContext());
     }
 
     /**
@@ -50,6 +56,7 @@ public class YRenderer implements GLSurfaceView.Renderer, SurfaceTexture.OnFrame
     public void onSurfaceChanged(GL10 gl10, int i, int i1) {
         //开启预览
         cameraHelper.startPreview(surfaceTexture);
+        screenFilter.onReady(i,i1);
     }
 
     /**
@@ -71,6 +78,8 @@ public class YRenderer implements GLSurfaceView.Renderer, SurfaceTexture.OnFrame
         //surfaceTexture 比较特殊，在opengl当中 使用的是特殊的采样器 samplerExternalOES （不是sampler2D）
         //获得变换矩阵
         surfaceTexture.getTransformMatrix(mtx);
+
+        screenFilter.onDrawFrame(textures[0],mtx);
     }
 
     /**
