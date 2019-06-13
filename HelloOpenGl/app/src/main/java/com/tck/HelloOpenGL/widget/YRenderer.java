@@ -1,4 +1,4 @@
-package com.tck.HelloOpenGL;
+package com.tck.HelloOpenGL.widget;
 
 import android.graphics.SurfaceTexture;
 import android.hardware.Camera;
@@ -104,5 +104,13 @@ public class YRenderer implements GLSurfaceView.Renderer, SurfaceTexture.OnFrame
 
     public void onSurfaceDestroyed() {
         cameraHelper.stopPreview();
+    }
+
+    public void startRecord(float speed) {
+
+    }
+
+    public void stopRecord() {
+
     }
 }
