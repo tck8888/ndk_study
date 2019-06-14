@@ -2,12 +2,17 @@ package com.tck.HelloOpenGL.widget;
 
 import android.graphics.SurfaceTexture;
 import android.hardware.Camera;
+import android.opengl.EGL14;
+import android.opengl.EGLContext;
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
 
 import com.tck.HelloOpenGL.filter.CameraFilter;
 import com.tck.HelloOpenGL.filter.ScreenFilter;
+import com.tck.HelloOpenGL.record.MediaRecorder;
 import com.tck.HelloOpenGL.util.CameraHelper;
+
+import java.io.IOException;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
@@ -30,6 +35,7 @@ public class YRenderer implements GLSurfaceView.Renderer, SurfaceTexture.OnFrame
     private ScreenFilter screenFilter;
     private int[] textures;
     private CameraFilter cameraFilter;
+    private MediaRecorder mediaRecorder;
 
     public YRenderer(YGLSurfaceView yglSurfaceView) {
         this.yglSurfaceView = yglSurfaceView;
@@ -47,6 +53,10 @@ public class YRenderer implements GLSurfaceView.Renderer, SurfaceTexture.OnFrame
         //注意：必须在gl线程操作opengl
         cameraFilter = new CameraFilter(yglSurfaceView.getContext());
         screenFilter = new ScreenFilter(yglSurfaceView.getContext());
+        //渲染线程的EGL上下文
+        EGLContext eglContext = EGL14.eglGetCurrentContext();
+        mediaRecorder = new MediaRecorder(yglSurfaceView.getContext(), "/sdcard/a.mp4", CameraHelper.HEIGHT, CameraHelper.WIDTH, eglContext);
+
     }
 
     /**
@@ -92,6 +102,9 @@ public class YRenderer implements GLSurfaceView.Renderer, SurfaceTexture.OnFrame
         //....
         //加完之后再显示到屏幕中去
         screenFilter.onDrawFrame(id);
+
+        //进行录制
+        mediaRecorder.encodeFrame(id, surfaceTexture.getTimestamp());
     }
 
     /**
@@ -107,10 +120,14 @@ public class YRenderer implements GLSurfaceView.Renderer, SurfaceTexture.OnFrame
     }
 
     public void startRecord(float speed) {
-
+        try {
+            mediaRecorder.start(speed);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public void stopRecord() {
-
+        mediaRecorder.stop();
     }
 }

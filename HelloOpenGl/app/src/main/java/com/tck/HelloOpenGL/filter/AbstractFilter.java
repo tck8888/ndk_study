@@ -134,6 +134,7 @@ public abstract class AbstractFilter {
         GLES20.glUniform1i(vTexture, 0);
         GLES20.glDrawArrays(GLES20.GL_TRIANGLE_STRIP, 0, 4);
 
+        GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, 0);
         return textureId;
     }
 

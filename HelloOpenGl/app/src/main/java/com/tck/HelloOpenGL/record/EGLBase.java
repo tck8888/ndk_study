@@ -41,6 +41,23 @@ public class EGLBase {
     public EGLBase(Context context, int width, int height, Surface surface, EGLContext eglContext) {
         //配置EGL环境
         createEGL(eglContext);
+
+        //把Surface贴到  mEglDisplay ，发生关系
+        int[] attrib_list = {
+                EGL14.EGL_NONE
+        };
+        // 绘制线程中的图像 就是往这个mEglSurface 上面去画
+        mEglSurface = EGL14.eglCreateWindowSurface(mEglDisplay, mEglConfig, surface, attrib_list, 0);
+
+        // 绑定当前线程的显示设备及上下文， 之后操作opengl，就是在这个虚拟显示上操作
+        if (!EGL14.eglMakeCurrent(mEglDisplay,mEglSurface,mEglSurface,mEglContext)) {
+            throw  new RuntimeException("eglMakeCurrent 失败！");
+        }
+        //像虚拟屏幕画
+        mScreenFilter = new ScreenFilter(context);
+        mScreenFilter.onReady(width,height);
+
+
     }
 
     private void createEGL(EGLContext eglContext) {
@@ -92,5 +109,40 @@ public class EGLBase {
             throw new RuntimeException("EGL Context Error.");
         }
 
+    }
+
+
+    /**
+     *
+     * @param textureId 纹理id 代表一个图片
+     * @param timestamp 时间戳
+     */
+    public void draw(int textureId,long timestamp){
+        // 绑定当前线程的显示设备及上下文， 之后操作opengl，就是在这个虚拟显示上操作
+        if (!EGL14.eglMakeCurrent(mEglDisplay,mEglSurface,mEglSurface,mEglContext)) {
+            throw  new RuntimeException("eglMakeCurrent 失败！");
+        }
+        //画画 画到虚拟屏幕上
+        mScreenFilter.onDrawFrame(textureId);
+        //刷新eglsurface的时间戳
+        EGLExt.eglPresentationTimeANDROID(mEglDisplay,mEglSurface,timestamp);
+
+        //交换数据
+        //EGL的工作模式是双缓存模式， 内部有两个frame buffer (fb)
+        //当EGL将一个fb  显示屏幕上，另一个就在后台等待opengl进行交换
+        EGL14.eglSwapBuffers(mEglDisplay,mEglSurface);
+    }
+
+
+    /**
+     * 回收
+     */
+    public void release(){
+        EGL14.eglDestroySurface(mEglDisplay, mEglSurface);
+        EGL14.eglMakeCurrent(mEglDisplay, EGL14.EGL_NO_SURFACE, EGL14.EGL_NO_SURFACE,
+                EGL14.EGL_NO_CONTEXT);
+        EGL14.eglDestroyContext(mEglDisplay, mEglContext);
+        EGL14.eglReleaseThread();
+        EGL14.eglTerminate(mEglDisplay);
     }
 }
